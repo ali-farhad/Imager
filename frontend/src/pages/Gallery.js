@@ -30,6 +30,8 @@ const styles = {
   textAlign: 'center',
 };
 
+// const prodUri = 'http://alifarhad.buzz/';
+const prodUri = 'http://localhost:5000/';   
 
 
 function Gallery() {
@@ -43,7 +45,7 @@ function Gallery() {
         
     const fetchPics = async () => {
 
-        const response = await fetch("http://localhost:5000/api/getImgsFull")
+        const response = await fetch(prodUri + "api/getImgsFull")
         const json = await response.json()
 
         if(response.ok) {
@@ -81,7 +83,7 @@ const removeFile = (filename) => {
 
 const handleDelete = (item) => {
       //axios delete request
-      axios.delete(`http://localhost:5000/api/deleteImgFile/${item}`)
+      axios.delete(`${prodUri}api/deleteImgFile/${item}`)
       .then(res => {
         console.log(res)
         //reload windows

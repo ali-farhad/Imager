@@ -32,7 +32,8 @@ const tableImg = {
 }
 
 
-   
+// const prodUri = 'http://alifarhad.buzz/';
+const prodUri = 'http://localhost:5000/';   
 
 function Home() {
 
@@ -95,7 +96,7 @@ function Home() {
   const handleExportBtn = () => {
     
     if(selectedRows.length > 0){ 
-fetch("http://localhost:5000/pdf/generate", {
+fetch(prodUri + "pdf/generate", {
 	
 	// Adding method type
 	method: "POST",
@@ -156,7 +157,7 @@ fetch("http://localhost:5000/pdf/generate", {
         let tableValue = `${prams.value}.jpg`
         if(serverImgs.includes(tableValue)) {
           return (
-            <img style={tableImg} src={`http://localhost:5000/api/getImgFile/${prams.value}.jpg`}/>
+            <img style={tableImg} src={`${prodUri}api/getImgFile/${prams.value}.jpg`}/>
           )
         } else {
           return (
@@ -271,7 +272,7 @@ fetch("http://localhost:5000/pdf/generate", {
 
     //get the data from api
 
-    const response = await fetch("http://localhost:5000/api/csv")
+    const response = await fetch(prodUri + "api/csv")
     console.log(response);
     const json = await response.json();
 
@@ -285,7 +286,7 @@ fetch("http://localhost:5000/pdf/generate", {
  //get real urls  from api
 
 const getImgs = async () => {
-  const imgsArr = await fetch("http://localhost:5000/api/getImgNames")
+  const imgsArr = await fetch(prodUri + "api/getImgNames")
   const json = await imgsArr.json();
 
   if(imgsArr.ok) {
@@ -369,7 +370,7 @@ getImgs();
     //add the file to the formdata object
     formData.append('csv', file);
     //create an object of options to pass to the fetch call
-    axios.post('http://localhost:5000/api/singleCsv', formData)
+    axios.post(prodUri + 'api/singleCsv', formData)
             .then((res) => {
                console.log("ok ");
                window.location.reload();

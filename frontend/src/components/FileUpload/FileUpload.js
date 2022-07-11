@@ -7,6 +7,9 @@ import axios from 'axios'
 //MUI Imports
 import Typography from '@mui/material/Typography';
 
+// const prodUri = 'http://alifarhad.buzz/';
+const prodUri = 'http://localhost:5000/';   
+
 
 const FileUpload = ({ files, setFiles, removeFile, setPics, pics }) => {
 
@@ -52,7 +55,7 @@ const FileUpload = ({ files, setFiles, removeFile, setPics, pics }) => {
         // formData.append(
         //     "image", file
         // )
-        axios.post('http://localhost:5000/api/multiple', formData)
+        axios.post(prodUri + 'api/multiple', formData)
             .then((res) => {
                 file.isUploading = false;
                 // setFiles([...files, file])
