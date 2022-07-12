@@ -32,8 +32,8 @@ const tableImg = {
 }
 
 
-// const prodUri = 'http://alifarhad.buzz/';
-const prodUri = 'http://localhost:5000/';   
+// const prodUri = 'https://catalogofgpanama.com/';
+const prodUri = 'http://localhost:5000/'; 
 
 function Home() {
 
@@ -93,6 +93,30 @@ function Home() {
     setSelectedRows(selectedData);
   };
 
+  const getPdfFile = async () => {
+
+    //fetch call response type blob
+    
+      axios(`${prodUri}pdf/getPdf/order`, {
+        method: "GET",
+        responseType: "blob"
+        //Force to receive data in a Blob Format
+      })
+        .then(response => {
+          //Create a Blob from the PDF Stream
+          const file = new Blob([response.data], {
+            type: "application/pdf"
+          });
+          //Build a URL from the file
+          const fileURL = URL.createObjectURL(file);
+          //Open the URL on new Window
+          window.open(fileURL);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    };
+
   const handleExportBtn = () => {
     
     if(selectedRows.length > 0){ 
@@ -114,10 +138,11 @@ fetch(prodUri + "pdf/generate", {
 })
 
 // Converting to JSON
-.then(response => response.json())
-
-// Displaying results to console
-.then(json => console.log(json));
+.then(response => response)
+.then(data => {
+  getPdfFile();
+}
+)
 
   }
   else{

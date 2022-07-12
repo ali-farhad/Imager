@@ -7,7 +7,7 @@ import axios from 'axios'
 //MUI Imports
 import Typography from '@mui/material/Typography';
 
-// const prodUri = 'http://alifarhad.buzz/';
+// const prodUri = 'https://catalogofgpanama.com/';
 const prodUri = 'http://localhost:5000/';   
 
 

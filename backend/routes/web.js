@@ -87,10 +87,11 @@ app.use('../images', express.static('images'));
 
 
 //get all images with fullpath
-
+const prodUri = "http://localhost:5000/"
+// const prodUri = 'https://catalogofgpanama.com/';
 router.get('/getImgsFull', (req, res) => {
 
-    const uri = 'http://localhost:5000/api/getImgFile/'
+    const uri = prodUri + 'api/getImgFile/'
 
     fs.readdir('./images', function(err, files) {
         if (err) throw err; // Fail if the file can't be read.

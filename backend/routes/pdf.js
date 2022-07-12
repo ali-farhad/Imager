@@ -46,7 +46,7 @@ router.post('/generate/', (req, res, next) => {
         marcas.push(rowsData[i]['Marca']);
         caras.push(rowsData[i]['Características']);
     }
-    // console.log(rowsData.length)
+    console.log(rowsData.length, "length")
     
     const tables = [];
     for (let i = 0; i < rowsData.length; i++) {
@@ -191,20 +191,25 @@ router.post('/generate/', (req, res, next) => {
     let writeStream = pdfDoc.pipe(fs.createWriteStream('./pdfs/' + pdfName + '.pdf'));
     pdfDoc.end();
 
-    var pathUrl = req.path;
-    if(pathUrl !== '/') {
+  
     writeStream.on('finish', function () {
+
     //send file to browser with pdfName
-    res.download('./pdfs/' + pdfName + '.pdf', pdfName + '.pdf', function (err) {
-        if (err) {
-            console.log(err);
-        }
-    });  
+    
+        res.download('./pdfs/' + pdfName + '.pdf', pdfName + '.pdf');
+
+      
+   
+    
 });
 
-    } else {
-        next();
-    }
+
+})
+
+
+//create a get route to send pdf file
+router.get('/getPdf/:pdfName', (req, res) => {
+    res.sendFile(path.join(__dirname, '../pdfs/' + req.params.pdfName + '.pdf'));
 
 })
 

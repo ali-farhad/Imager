@@ -30,7 +30,7 @@ const styles = {
   textAlign: 'center',
 };
 
-// const prodUri = 'http://alifarhad.buzz/';
+// const prodUri = 'https://catalogofgpanama.com/';
 const prodUri = 'http://localhost:5000/';   
 
 
