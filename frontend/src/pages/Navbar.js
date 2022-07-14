@@ -17,15 +17,12 @@ import Skeleton from '@mui/material/Skeleton';
 
 
 
-//login button
-import { useAuth0} from '@auth0/auth0-react';
 
 
 const drawerWidth = 240;
 
 export default function Navbar(props: Props) {
 
-    const { loginWithRedirect, logout, isAuthenticated, isLoading} = useAuth0();
   
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -55,21 +52,21 @@ export default function Navbar(props: Props) {
               </Button>
             </ListItem>
 
-            {(isAuthenticated && (
+            {/* {(isAuthenticated && (
            <ListItem key={3} disablePadding>
            <Button component={RouterLink} to="/gallery">
            Logout
            </Button>
          </ListItem>
-          ))}
-
+          ))} */}
+{/* 
 {(!isAuthenticated && (
            <ListItem key={3} disablePadding>
            <Button component={RouterLink} to="/gallery">
            Login
            </Button>
          </ListItem>
-          ))}
+          ))} */}
 
 
             
@@ -125,47 +122,38 @@ export default function Navbar(props: Props) {
 
      
 
-        {(isLoading) ? (
 
-             <Button
-            variant="contained"
-            sx={{mx: 1}}
-            style={{ backgroundColor: '#42a5f5', color: '#fff' }}   
-            >
-              <Skeleton width={'100%'} />
-            </Button>
+            
 
         
-        ) : (
+   
 
 
-        (!isAuthenticated && (
+    
 
-            <Button
+            {/* <Button
             variant="contained"
             sx={{mx: 1}}
             style={{ backgroundColor: '#42a5f5', color: '#fff' }}
-            onClick={() => loginWithRedirect()}    
+              
             >
             Login
             </Button>
-         
-
-        ))
-        )}
+          */}
 
 
 
-        {(isAuthenticated && (
-            <Button
+
+      
+            {/* <Button
             variant="contained"
             sx={{mx: 1}}
             style={{ backgroundColor: '#42a5f5', color: '#fff' }}
             onClick={() => logout()}    
             >
             Logout
-            </Button>
-        ))}
+            </Button> */}
+      
 
 
      

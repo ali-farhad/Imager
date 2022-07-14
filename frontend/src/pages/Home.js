@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 //import user
-import { useAuth0 } from '@auth0/auth0-react';
 
 import axios from 'axios'
 
@@ -24,6 +23,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Environment } from 'ag-grid-community';
 
 //table img styles
 const tableImg = {
@@ -31,13 +31,12 @@ const tableImg = {
   objectFit: 'cover',
 }
 
+const prodUri = process.env.REACT_APP_API_ENDPOINT;
 
-// const prodUri = 'https://catalogofgpanama.com/';
-const prodUri = 'http://localhost:5000/'; 
+  
 
 function Home() {
 
-  const { user, isAuthenticated } = useAuth0();
 
     //general states
     const [rowData, setRowData] = useState();
@@ -418,7 +417,6 @@ getImgs();
   return (
     <div>
 
-        {/* <h1>{JSON.stringify(user, null, 2)}</h1> */}
 
          <div style={{display: "flex", justifyContent: "space-between"}}>
 
@@ -439,7 +437,6 @@ getImgs();
           <div className="file-inputs">
       
 
-          {user?.email=== "admin@admin.com" ?
    
               <Button variant="contained" component="label" color="primary">
         {" "}
@@ -447,13 +444,8 @@ getImgs();
         <input hidden name="csv" onChange={uploadHandler} type="file"  accept="csv/*" />
       </Button>
 
-        :
-        <Button disabled variant="contained" component="label" color="primary">
-        {" "}
-        <AddIcon/> Upload CSV File
-      </Button>
         
-        }
+    
 
                 </div>
 

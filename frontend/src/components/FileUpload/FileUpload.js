@@ -7,9 +7,7 @@ import axios from 'axios'
 //MUI Imports
 import Typography from '@mui/material/Typography';
 
-// const prodUri = 'https://catalogofgpanama.com/';
-const prodUri = 'http://localhost:5000/';   
-
+const prodUri = process.env.REACT_APP_API_ENDPOINT;
 
 const FileUpload = ({ files, setFiles, removeFile, setPics, pics }) => {
 

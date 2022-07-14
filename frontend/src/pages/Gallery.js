@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
-import { useAuth0 } from '@auth0/auth0-react';
-import Skeleton from '@mui/material/Skeleton';
+
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 
 import axios from 'axios'
@@ -11,12 +12,10 @@ import Typography from '@mui/material/Typography';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
-import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
 
 
 //form imports
-import TextField from '@mui/material/TextField';
 import CardContent from '@mui/material/CardContent';
 
 
@@ -25,21 +24,15 @@ import FileUpload from "../components/FileUpload/FileUpload";
 import '../App.scss';
 
 
-const styles = {
-  fontFamily: 'sans-serif',
-  textAlign: 'center',
-};
 
-// const prodUri = 'https://catalogofgpanama.com/';
-const prodUri = 'http://localhost:5000/';   
-
+const prodUri = process.env.REACT_APP_API_ENDPOINT;
 
 function Gallery() {
 
-  const { user, isAuthenticated, isLoading } = useAuth0();
 
 
   const [pics, setPics] = useState([]);
+  const [imageLoaded, setImageLoaded]=React.useState(false);
 
   useEffect(() => {
         
@@ -100,12 +93,11 @@ const handleDelete = (item) => {
         Gallery
       </Typography>
 
-    {isLoading ? 
-         <Skeleton variant="rectangular" width={'100%'} height={200} />
+   
 
-    :   
+     
 
-    (isAuthenticated && (
+    
 
       <CardContent>
 
@@ -119,9 +111,7 @@ const handleDelete = (item) => {
       
     </CardContent>
 
-     ))
-    }
-
+   
     
 
 
@@ -130,11 +120,16 @@ const handleDelete = (item) => {
         <ImageListItem key={index}>
           <img
             src={`${item.uri}`}
-            srcSet={`${item.uri}`}
             alt={item.name}
-            loading="lazy"
-            style={{border: '2px solid black'}}
+            // style={{border: '2px solid black'}}
+            //set visiblity hidden if imageLoaded is false
+            onLoad={() => setImageLoaded(true)} className={`${!imageLoaded}`}
           />
+           {!imageLoaded && (
+          <div className="smooth-preloader">
+              <Skeleton count={10} /> 
+          </div>
+        )}
           <ImageListItemBar
             title={item.name}
             subtitle={<span>by: {item.name}</span>}
