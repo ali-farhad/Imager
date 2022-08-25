@@ -6,6 +6,9 @@ import axios from 'axios'
 
 //MUI Imports
 import Typography from '@mui/material/Typography';
+import LinearProgress from '@mui/material/LinearProgress';
+import Box from '@mui/material/Box';
+
 
 const prodUri = process.env.REACT_APP_API_ENDPOINT;
 
@@ -14,6 +17,8 @@ const FileUpload = ({ files, setFiles, removeFile, setPics, pics }) => {
 
     const [errors, setErrors] = useState([]);
     const [infos, setInfos] = useState([]);
+    const [prog, setProg] = useState(0);
+    const [uploading, setUploading] = useState(false);
 
     const uploadHandler = (event) => {
         setErrors([]);
@@ -40,26 +45,36 @@ const FileUpload = ({ files, setFiles, removeFile, setPics, pics }) => {
         
         // if(!file) return;
         file.isUploading = true;
+        setUploading(true);
         setFiles([...files, file])
 
         //upload file
         const formData = new FormData();
+        let config = {
+            onUploadProgress: function(progressEvent) {
+                    let percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
+                    console.log(percentCompleted);
+                    setProg(percentCompleted);
+            }
+       };
 
         
         //itearate through file and upload each file
         for (let i = 0; i < file.length; i++) {
             formData.append('images', file[i]);
         }
-        // formData.append(
-        //     "image", file
-        // )
-        axios.post(prodUri + 'api/multiple', formData)
+        
+        axios.post(prodUri + 'api/multiple', formData, config)
             .then((res) => {
                 file.isUploading = false;
-                // setFiles([...files, file])
-                window.location.reload();
+                setUploading(false);
+                //fire event after 10 seconds
+                setInfos([...infos, 'Images uploaded successfully']);
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
         
-            setInfos([...infos, 'Images Uploaded Successfully!']);
         
             })
             .catch((err) => {
@@ -103,8 +118,22 @@ const FileUpload = ({ files, setFiles, removeFile, setPics, pics }) => {
                 </Typography>
             ))}
 
+
+    {uploading && (
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ width: '100%', marginBlock: "2rem",}}>
+        <LinearProgress sx={{height: '10px'}} variant="determinate" value={prog} />
+      </Box>
+      <Box>
+        <Typography sx={{minWidth: "50px"}} variant="body2" color="text.secondary">
+            {prog} %
+        </Typography>
+      </Box>
+    </Box>
+    )}
         </>
     )
 }
+
 
 export default FileUpload

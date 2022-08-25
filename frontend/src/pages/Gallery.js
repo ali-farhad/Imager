@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from 'react'
 
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
 
 
 import axios from 'axios'
@@ -13,6 +11,7 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import Button from '@mui/material/Button';
+
 
 
 //form imports
@@ -32,7 +31,7 @@ function Gallery() {
 
 
   const [pics, setPics] = useState([]);
-  const [imageLoaded, setImageLoaded]=React.useState(false);
+  // const [imageLoaded, setImageLoaded]=React.useState(false);
 
   useEffect(() => {
         
@@ -86,6 +85,19 @@ const handleDelete = (item) => {
 }
 
 
+const handlePreview = (item) => {
+  //axios get request
+  // axios.get(`${prodUri}api/getImgFile/${item}`)
+  // .then(res => {
+  //   //opem image in new location
+  //   window.open(res.data.imgUrl, '_blank');
+  // }
+  // )
+  window.open(`${prodUri}api/getImgFile/${item}`, '_blank');
+  
+}
+
+
   return (
     <>
     
@@ -115,10 +127,10 @@ const handleDelete = (item) => {
     
 
 
-    <ImageList sx={{ width: '100%', height: '100%', overflowY: 'unset' }} cols={4} gap={10}>
+    <ImageList sx={{ display: { xs: 'block', sm: 'block', md: 'grid' }, width: '100%', height: '100%', overflowY: 'unset' }} cols={7} gap={10}>
       {pics.map((item, index) => (
-        <ImageListItem key={index}>
-          <img
+        <ImageListItem key={index} sx={{border: '1px dashed grey', padding: '.8rem .4rem', marginBottom: '1rem'}}>
+          {/* <img
             src={`${item.uri}`}
             alt={item.name}
             // style={{border: '2px solid black'}}
@@ -128,14 +140,20 @@ const handleDelete = (item) => {
            {!imageLoaded && (
           <div className="smooth-preloader">
               <Skeleton count={10} /> 
-          </div>
+          </div> */}
         )}
           <ImageListItemBar
+            sx={{cursor: 'pointer', color: 'blue', textDecoration: 'underline', margin: '0 auto'}}
             title={item.name}
-            subtitle={<span>by: {item.name}</span>}
+            onClick={() => handlePreview(item.name)}
+            // subtitle={<span>by: {item.name}</span>}
             position="below"
           />
-          <Button sx={{ marginBottom: "1rem" }}  onClick={() => handleDelete(item.name)} color="error" variant="contained">Delete</Button>
+          {/* <Button sx={{ marginBottom: ".6rem" }}  onClick={() => handlePreview(item.name)} color="primary" variant="contained">Preview</Button> */}
+          <Button sx={{ marginBottom: "" }}  onClick={() => handleDelete(item.name)} color="error" variant="contained">Delete</Button>
+
+          
+
 
         </ImageListItem>
       ))}

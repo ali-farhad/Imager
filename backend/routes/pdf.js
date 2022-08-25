@@ -34,38 +34,53 @@ router.post('/generate/', (req, res, next) => {
     let references = [];
     let descriptions = [];
     let prices = [];
-    let bultos = [];
+    let subrubro = [];
+    let rubro = [];
     let marcas = [];
     let caras = [];
+    let disponible = [];
 
     for (let i = 0; i < rowsData.length; i++) {
         references.push(rowsData[i]['Reference']);
         descriptions.push(rowsData[i]['Description']);
         prices.push(rowsData[i]['Price A']);
-        bultos.push(rowsData[i]['Cant x Bulto']);
+        subrubro.push(rowsData[i]['Sub Rubro']);
+        rubro.push(rowsData[i]['Rubro']);
         marcas.push(rowsData[i]['Marca']);
         caras.push(rowsData[i]['Características']);
+        disponible.push(rowsData[i]['Disponible']);
     }
     console.log(rowsData.length, "length")
+    
+    //for all items in prices
+    for (let i =0; i < prices.length; i++) {
+        prices[i] = Number(prices[i]).toFixed(2);
+
+    }
+
     
     const tables = [];
     for (let i = 0; i < rowsData.length; i++) {
 
             let table = {
        
-             widths: ['auto', 'auto', 'auto', 'auto', '*', 'auto'],
+             widths: ['auto', 'auto', 'auto', 'auto', 'auto', '*', '*'],
 
         body: [
-            [{
+            [
+            {
+                    text: 'Reference',
+                    rowSpan: 1,
+                    style: 'header'
+    
+            },
+            {
                 text: 'Description',
                 rowSpan: 1,
                 style: 'header'
-            }, {
-                text: 'Reference',
-                rowSpan: 1,
-                style: 'header'
-
-            }, {
+            }, 
+          
+             {
                 text: 'Price',
                 rowSpan: 1,
                 style: 'header'
@@ -73,7 +88,14 @@ router.post('/generate/', (req, res, next) => {
                 
             },
             {
-                text: 'Cant x Bulto',
+                text: 'Sub Rubro',
+                rowSpan: 1,
+                style: 'header'
+
+                
+            },
+            {
+                text: 'Rubro',
                 rowSpan: 1,
                 style: 'header'
 
@@ -87,7 +109,7 @@ router.post('/generate/', (req, res, next) => {
                 
             },
             {
-                text: 'Características',
+                text: 'Disponible',
                 rowSpan: 1,
                 style: 'header'
 
@@ -102,7 +124,7 @@ router.post('/generate/', (req, res, next) => {
     ],
            
             // now data and values
-            [descriptions[i], references[i], prices[i], bultos[i], marcas[i], caras[i]],
+            [ references[i], descriptions[i], prices[i], subrubro[i], rubro[i],disponible[i] , marcas[i] ],
             
         ]
     }

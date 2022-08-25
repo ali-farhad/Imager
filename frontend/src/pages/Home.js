@@ -68,6 +68,7 @@ function Home() {
 
    //rows selection sate
    const [selectedRows, setSelectedRows] = useState([]);
+   const [validRows, setValidRows] = useState([]);
   
 
 
@@ -87,7 +88,10 @@ function Home() {
 
     let selectedData = selectedNodes.map(node => node.data);
 
-    console.log(JSON.stringify(selectedData));
+    // console.log(JSON.stringify(selectedData));
+    // console.log(selectedData)
+    //length of selected rows
+    console.log(selectedData.length, "total length")
 
     setSelectedRows(selectedData);
   };
@@ -104,12 +108,33 @@ function Home() {
         .then(response => {
           //Create a Blob from the PDF Stream
           const file = new Blob([response.data], {
-            type: "application/pdf"
+            type: "application/pdf",
+            
           });
           //Build a URL from the file
           const fileURL = URL.createObjectURL(file);
+          //rename the file name
+          const link = document.createElement("a");
+          link.href = fileURL;
+          //get current date and time
+          const date = new Date();
+          const time = date.getTime();
+          //format date and time in month/day/year format
+          const dateString = date.toLocaleDateString();
+          //convert time to 24 hours format
+          const timeString = date.toLocaleTimeString("en-US", {
+            hour12: false,
+            hour: "numeric",
+            minute: "numeric"
+          });
+          //append date and time to file name
+          link.download = `${dateString}-${timeString}.pdf`;
+          link.click();
+          //clean up
           //Open the URL on new Window
-          window.open(fileURL);
+          window.open(link);
+          URL.revokeObjectURL(fileURL);
+
         })
         .catch(error => {
           console.log(error);
@@ -150,12 +175,18 @@ fetch(prodUri + "pdf/generate", {
   };
 
 
+  var numberValueFormatter = function (params) {
+    //change params to number
+    return Number(params.value).toFixed(2);
+  };
+
 
   const columnDefs = [
     {
       headerName: 'Reference',
       field: 'Reference',
       headerCheckboxSelection: true,
+      headerCheckboxSelectionFilteredOnly: true,
       checkboxSelection: function(params) {
         if(serverImgs.includes(params.data.Reference + ".jpg")){
           return true;
@@ -200,90 +231,102 @@ fetch(prodUri + "pdf/generate", {
     {
       headerName: 'Price A',
       field: 'Price A',
-      minWidth: 97
-    },
-    {
-      headerName: 'Category',
-      field: 'Category',
-      minWidth: 110
-    },
-    {
-      headerName: 'Codigo de Barra',
-      field: 'Codigo de Barra',
-      minWidth: 158
-    },
- 
-    {
-      headerName: 'Rubro',
-      field: 'Rubro',
-      minWidth: 102
-    },
-    {
-      headerName: 'Sub Rubro',
-      field: 'Sub Rubro',
-      minWidth: 120
-    },
-    {
-      headerName: 'Cant x Bulto',
-      field: 'Cant x Bulto',
-      minWidth: 133
-    },
-    {
-      headerName: 'Stock',
-      field: 'Stock',
-      minWidth: 90
-    },
-    {
-      headerName: 'Comprado',
-      field: 'Comprado',
-      minWidth: 115
-    },
-    {
-      headerName: 'Pendiente',
-      field: 'Pendiente',
-      minWidth: 115
-    },
-    {
-      headerName: 'Disponible',
-      field: 'Disponible',
-      minWidth: 115
-    },
-    {
-      headerName: 'Temporada',
-      field: 'Temporada',
-      minWidth: 115
+      minWidth: 97,
+      filter: 'agNumberColumnFilter',
+      valueFormatter: numberValueFormatter,
+
     },
     {
       headerName: 'Marca',
       field: 'Marca',
       minWidth: 115
     },
+    
+    {
+      headerName: 'Rubro',
+      field: 'Rubro',
+      minWidth: 102
+    },
+
+    {
+      headerName: 'Temporada',
+      field: 'Temporada',
+      minWidth: 115
+    },
+    
+    {
+      headerName: 'Sub Rubro',
+      field: 'Sub Rubro',
+      minWidth: 120
+    },
+    // {
+    //   headerName: 'Category',
+    //   field: 'Category',
+    //   minWidth: 110
+    // },
+    // {
+    //   headerName: 'Codigo de Barra',
+    //   field: 'Codigo de Barra',
+    //   minWidth: 158
+    // },
+ 
+    {
+      headerName: 'Cant x Bulto',
+      field: 'Cant x Bulto',
+      minWidth: 133,
+      filter: 'agNumberColumnFilter',
+
+    },
+    {
+      headerName: 'Stock',
+      field: 'Stock',
+      minWidth: 90,
+      filter: 'agNumberColumnFilter',
+    },
+    {
+      headerName: 'Comprado',
+      field: 'Comprado',
+      minWidth: 115,
+      filter: 'agNumberColumnFilter',
+    },
+    {
+      headerName: 'Pendiente',
+      field: 'Pendiente',
+      minWidth: 115,
+      filter: 'agNumberColumnFilter',
+    },
+    {
+      headerName: 'Disponible',
+      field: 'Disponible',
+      minWidth: 115,
+      filter: 'agNumberColumnFilter',
+    },
+   
+   
     {
       headerName: 'Características',
       field: 'Características',
       minWidth: 300
     },
-    {
-      headerName: 'Observaciones',
-      field: 'Observaciones',
-      minWidth: 115
-    },
-    {
-      headerName: 'Price F',
-      field: 'Price F',
-      minWidth: 115
-    },
-    {
-      headerName: 'Tipo',
-      field: 'Tipo',
-      minWidth: 115
-    },
+    // {
+    //   headerName: 'Observaciones',
+    //   field: 'Observaciones',
+    //   minWidth: 115
+    // },
+    // {
+    //   headerName: 'Price F',
+    //   field: 'Price F',
+    //   minWidth: 115
+    // },
+    // {
+    //   headerName: 'Tipo',
+    //   field: 'Tipo',
+    //   minWidth: 115
+    // },
   ];
 
 
-  
-
-
+ 
   const [serverImgs, setServerImgs] = useState([]);
 
   const onGridReady = async (prams) => {
@@ -291,13 +334,29 @@ fetch(prodUri + "pdf/generate", {
     setGridApi(prams.api);
     setGridColApi(prams.columnApi);
 
+    const getImgs = async () => {
+      const imgsArr = await fetch(prodUri + "api/getImgNames")
+      const json = await imgsArr.json();
+    
+      if(imgsArr.ok) {
+          setServerImgs(json.imgs);
+    
+      }
+    }
+    
+    getImgs();
+    
+
+    
+
  
 
 
     //get the data from api
 
     const response = await fetch(prodUri + "api/csv")
-    console.log(response);
+    // console.log(response);
+    
     const json = await response.json();
 
     if(response.ok) {
@@ -306,19 +365,15 @@ fetch(prodUri + "pdf/generate", {
     }
 
 
+    prams.api.onFilterChanged();
+
+
+
 
  //get real urls  from api
 
-const getImgs = async () => {
-  const imgsArr = await fetch(prodUri + "api/getImgNames")
-  const json = await imgsArr.json();
 
-  if(imgsArr.ok) {
-      setServerImgs(json.imgs);
-  }
-}
 
-getImgs();
 
 
     };
@@ -375,12 +430,22 @@ getImgs();
 
   }
 
-  // const isRowSelectable = (node) => {
-  //     //if node data is null return false
-  //     console.log(node.data.Reference);
-  //     // if(serverImgs.includes(params.data.Reference + ".jpg")){
-  //     //count total node
-  // }
+  const isRowSelectable = (node) => {
+
+
+    const imgs = serverImgs.map(img => img.split('.')[0]);
+   
+    if(imgs.includes(node.data.Reference)) {
+        return true;
+
+      
+    }
+    else {
+      return false;
+    }
+
+    
+  }
 
 
 
@@ -432,14 +497,13 @@ getImgs();
         </AccordionSummary>
         <AccordionDetails>
     
-          {/* for each item in colsStatesArr */}
           <div style={{display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: "2rem" }}>
           <div className="file-inputs">
       
 
    
-              <Button variant="contained" component="label" color="primary">
-        {" "}
+              <Button sx = {{width: "100%"}} variant="contained" component="label" color="primary">
+     
         <AddIcon/> Upload CSV File
         <input hidden name="csv" onChange={uploadHandler} type="file"  accept="csv/*" />
       </Button>
@@ -450,6 +514,9 @@ getImgs();
                 </div>
 
           <Button onClick={handleExportBtn} variant="contained">Generate PDF</Button>
+
+          <Button disabled variant="contained">Total Rows Selected: {selectedRows.length}</Button>
+
 
             </div>
   
@@ -513,8 +580,9 @@ getImgs();
             onFirstDataRendered={onFirstDataRendered}
             onSelectionChanged={handleSelection}
             rowSelection={rowSelectionType}
-            // isRowSelectable={isRowSelectable}
+            isRowSelectable={isRowSelectable}
             rowHeight={rowHeight}
+            groupSelectsFiltered={true}
           ></AgGridReact>
         </div>
       </div>
